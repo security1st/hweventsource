@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vi: set et smarttab sw=4 tabstop=4: -->
+<!--
+Copyright © 2017 Hl Inc. and others. All rights reserved.
+
+This program and the accompanying materials are made available under the
+terms of the Eclipse Public License v1.0 which accompanies this distribution,
+and is available at http://www.eclipse.org/legal/epl-v10.html
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+  xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
+  odl:use-default-for-reference-types="true">
+
+  <reference id="dataBroker"
+    interface="org.opendaylight.controller.md.sal.binding.api.DataBroker" />
+
+  <reference id="eventSourceRegistry"
+             interface="org.opendaylight.controller.messagebus.spi.EventSourceRegistry" />
+
+  <reference id="domPublish"
+             interface="org.opendaylight.controller.md.sal.dom.api.DOMNotificationPublishService" />
+
+  <odl:clustered-app-config id="myConfig"
+                            binding-class="org.opendaylight.yang.gen.v1.urn.opendaylight.myapp.config.rev160624.MyConfig">
+  </odl:clustered-app-config>
+
+  <bean id="provider" class="com.hl.hweventsource.HweventsourceProvider"
+    init-method="init" destroy-method="close">
+    <argument ref="dataBroker" />
+    <argument ref="eventSourceRegistry" />
+    <argument ref="domPublish" />
+    <argument>
+      <bean factory-ref="myConfig" factory-method="getNumberSampleEventSources" />
+    </argument>
+    <argument>
+      <bean factory-ref="myConfig" factory-method="getMessageGeneratePeriod" />
+    </argument>
+    <argument>
+      <bean factory-ref="myConfig" factory-method="getMessageText" />
+    </argument>
+  </bean>
+</blueprint>

@@ -1,0 +1,35 @@
+module my-app-config {
+    yang-version 1;
+    namespace "urn:opendaylight:myapp:config";
+    prefix my-app-config;
+
+    description
+      "Configuration for ...";
+
+    revision "2016-06-24" {
+        description
+            "Initial revision.";
+    }
+
+    container my-config {
+        leaf id {
+            type string;
+            mandatory true;
+        }
+
+        leaf number-SampleEventSources {
+            type uint16;
+            default 2;
+        }
+
+        leaf message-GeneratePeriod {
+            type uint16;
+            default 3;
+        }
+
+        leaf message-Text {
+            type string;
+            default "Hello World";
+        }
+    }
+}
